@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/models/Products.dart';
+
+import 'Products.dart';
 
 class ProductsProvider extends ChangeNotifier{
-  List<Product> _items = [
-    Product(
+  bool onlyfav=false;
+  List<Products> _items = [
+    Products(
       id: 'p1',
       title: 'Red Shirt',
       description: 'A red shirt - it is pretty red!',
@@ -11,7 +13,7 @@ class ProductsProvider extends ChangeNotifier{
       imageUrl:
       'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
     ),
-    Product(
+    Products(
       id: 'p2',
       title: 'Trousers',
       description: 'A nice pair of trousers.',
@@ -19,7 +21,7 @@ class ProductsProvider extends ChangeNotifier{
       imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
     ),
-    Product(
+    Products(
       id: 'p3',
       title: 'Yellow Scarf',
       description: 'Warm and cozy - exactly what you need for the winter.',
@@ -27,7 +29,7 @@ class ProductsProvider extends ChangeNotifier{
       imageUrl:
       'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
     ),
-    Product(
+    Products(
       id: 'p4',
       title: 'A Pan',
       description: 'Prepare any meal you want.',
@@ -37,10 +39,16 @@ class ProductsProvider extends ChangeNotifier{
     ),
   ];
 
-   List<Product> get items{
-    return[..._items];
+   List<Products> get items{
+
+     return[..._items];
    }
-   Product FindById(String id)
+  List<Products> get Favitems{
+
+    return _items.where((element) => element.isFavorite==true).toList();
+  }
+
+   Products FindById(String id)
    {
      return _items.firstWhere((element) => element.id==id);
    }
