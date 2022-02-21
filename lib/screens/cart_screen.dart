@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/cart.dart';
+import 'package:shopapp/providers/orders.dart';
 import 'package:shopapp/widgets/cart_single_row.dart';
 
 class cart_screen extends StatelessWidget {
@@ -8,7 +9,8 @@ class cart_screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: true);
+    final order = Provider.of<Orders>(context, listen: false);
     Map<String, CartItem> cartItems = cart.items;
     return Scaffold(
       appBar: AppBar(
@@ -29,14 +31,23 @@ class cart_screen extends StatelessWidget {
                   ),
                   Spacer(),
                   Chip(
-                    label: Text(
-                      "\$${cart.total.roundToDouble()}",
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    label: Consumer<Cart>(
+                        builder: (ctx, value, child) => Text(
+                              "\$${cart.total.toStringAsFixed(2)}",
+                              style: const TextStyle(color: Colors.white),
+                            )),
                     backgroundColor: Colors.purple,
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                             const SnackBar(
+
+                                duration: Duration(seconds: 1),
+                                content: Text("Order Successfully Placed")));
+                        order.addOrder(cart.items.values.toList(), cart.total);
+                        cart.clear();
+                      },
                       child: const Text("ORDER NOW",
                           style: TextStyle(
                               color: Colors.purple,
@@ -44,16 +55,14 @@ class cart_screen extends StatelessWidget {
                 ],
               ),
             ),
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
           ),
           Expanded(
               child: ListView.builder(
             itemBuilder: (ctx, i) => cart_single_row(
                 cart.items.values.elementAt(i).title,
-                cart.items.values.elementAt(i).price,
                 cart.items.values.elementAt(i).imgurl,
-                cart.items.values.elementAt(i).quantity,
-                cart.items.values.elementAt(i).id.toString()),
+                cart.items.values.elementAt(i).id),
             itemCount: cartItems.length,
           )),
         ],

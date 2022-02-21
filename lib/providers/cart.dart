@@ -43,8 +43,8 @@ void increaseQuantity(String id)
   notifyListeners();
 }
   void decreaseQuantity(String id)
-
   {
+
     _items.update(
       id,
           (existingCartItem) => CartItem(
@@ -52,7 +52,7 @@ void increaseQuantity(String id)
         title: existingCartItem.title,
         price: existingCartItem.price,
         imgurl: existingCartItem.imgurl,
-        quantity: existingCartItem.quantity-1,
+        quantity: existingCartItem.quantity==1?existingCartItem.quantity:existingCartItem.quantity-1,
       ),
     );
     notifyListeners();
@@ -63,6 +63,11 @@ void increaseQuantity(String id)
     _items.forEach((key, value) {totalprice+=(value.price*value.quantity); });
     return totalprice;
   }
+void dismissItem(String id)
+{
+  _items.remove(id);
+  notifyListeners();
+}
 
   bool containsitem( String productid)
   {
@@ -97,7 +102,7 @@ void increaseQuantity(String id)
       _items.putIfAbsent(
         productId,
             () => CartItem(
-          id: DateTime.now().toString(),
+          id: productId,
           title: title,
           price: price,
           quantity: 1,
@@ -107,4 +112,30 @@ void increaseQuantity(String id)
     }
     notifyListeners();
   }
+  void clear() {
+    _items = {};
+    notifyListeners();
+  }
+
+
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if ((_items[productId]?.quantity)!> 1) {
+      _items.update(
+          productId,
+              (existingCartItem) => CartItem(
+            id: existingCartItem.id,
+            title: existingCartItem.title,
+            price: existingCartItem.price,
+            quantity: existingCartItem.quantity - 1, imgurl: existingCartItem.imgurl,
+          ));
+    } else {
+      _items.remove(productId);
+    }
+    notifyListeners();
+  }
 }
+
+

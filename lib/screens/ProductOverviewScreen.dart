@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopapp/providers/ProductsProvider.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/screens/cart_screen.dart';
+import 'package:shopapp/widgets/app_drawer.dart';
 import '../widgets/ProductsGrid.dart';
 import 'package:shopapp/widgets/ProductsItem.dart';
 import '../providers/Products.dart';
@@ -26,6 +27,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: app_drawer(),
       appBar: AppBar(
         title: const Text("My Shop"),
         actions: [
@@ -35,8 +37,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               value: Cartdata.itemCount.toString(),
               child: child!,
             ),
-            child:
-                IconButton(onPressed: ()=>Navigator.pushNamed(context, cart_screen.Route_name), icon: Icon(Icons.shopping_cart)),
+            child: IconButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, cart_screen.Route_name),
+                icon: const Icon(Icons.shopping_cart)),
           ),
           PopupMenuButton(
               onSelected: (selectgrid value) {
@@ -49,11 +53,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 });
               },
               itemBuilder: (ctx) => [
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       child: Text("Show Only Fav"),
                       value: selectgrid.onlyFav,
                     ),
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       child: Text("Show All"),
                       value: selectgrid.all,
                     )

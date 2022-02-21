@@ -6,11 +6,54 @@ import 'package:shopapp/providers/ProductsProvider.dart';
 class ProductDetailScreen extends StatelessWidget {
   static const String RouteName = "/ProductDetailScreen";
   late final String id;
+
   @override
   Widget build(BuildContext context) {
-    // id=ModalRoute.of(context)?.settings.arguments as String;
-    // final productsData=Provider.of<ProductsProvider>(context,listen: false) ;
-    // final title=productsData.FindById(id).title;
-    return Scaffold(appBar: AppBar(title:Text("itle"),),);
+    final productId =
+    ModalRoute.of(context)?.settings.arguments as String; // is the id!
+    final loadedProduct = Provider.of<ProductsProvider>(
+      context,
+      listen: false,
+    ).FindById(productId);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(loadedProduct.title),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 300,
+              width: double.infinity,
+              child: Image.network(
+                loadedProduct.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '\$${loadedProduct.price}',
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+            ),
+           const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                loadedProduct.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
+

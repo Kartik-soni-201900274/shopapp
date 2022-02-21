@@ -4,7 +4,7 @@ import 'Products.dart';
 
 class ProductsProvider extends ChangeNotifier{
   bool onlyfav=false;
-  List<Products> _items = [
+  final List<Products> _items = [
     Products(
       id: 'p1',
       title: 'Red Shirt',
@@ -52,5 +52,29 @@ class ProductsProvider extends ChangeNotifier{
    {
      return _items.firstWhere((element) => element.id==id);
    }
+
+   void addproduct(Products product)
+   {
+     Products newproduct=Products(id: DateTime.now.toString(), title: product.title, description: product.description, price: product.price, imageUrl: product.imageUrl);
+     _items.add(newproduct);
+     notifyListeners();
+   }
+   void deleteproduct(String id)
+   {
+     _items.removeWhere((element) => element.id==id);
+     notifyListeners();
+   }
+  void updateProduct(String id, Products newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
+  Products findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
+  }
 
 }
